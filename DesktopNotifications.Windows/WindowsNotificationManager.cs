@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Windows.UI.Notifications;
 using XmlDocument = Windows.Data.Xml.Dom.XmlDocument;
 
-#if NETSTANDARD
+#if !NETSTANDARD
 using System.IO;
 using System.Xml;
 #else
@@ -22,7 +22,7 @@ namespace DesktopNotifications.Windows
         private readonly Dictionary<ToastNotification, Notification> _notifications;
         private readonly Dictionary<ScheduledToastNotification, Notification> _scheduledNotification;
 
-#if NETSTANDARD
+#if !NETSTANDARD
         private readonly ToastNotifier _toastNotifier;
 #else
         private readonly ToastNotifierCompat _toastNotifier;
@@ -36,7 +36,7 @@ namespace DesktopNotifications.Windows
             _applicationContext = applicationContext ?? WindowsApplicationContext.FromCurrentProcess();
             _launchActionPromise = new TaskCompletionSource<string>();
 
-#if !NETSTANDARD
+#if NETSTANDARD
             if (ToastNotificationManagerCompat.WasCurrentProcessToastActivated())
             {
                 ToastNotificationManagerCompat.OnActivated += OnAppActivated;
@@ -48,7 +48,7 @@ namespace DesktopNotifications.Windows
             }
 #endif
 
-#if NETSTANDARD
+#if !NETSTANDARD
             _toastNotifier = ToastNotificationManager.CreateToastNotifier(_applicationContext.AppUserModelId);
 #else
             _toastNotifier = ToastNotificationManagerCompat.CreateToastNotifier();
@@ -142,7 +142,7 @@ namespace DesktopNotifications.Windows
 
         private static XmlDocument GenerateXml(Notification notification)
         {
-#if NETSTANDARD
+#if !NETSTANDARD
             var sw = new StringWriter();
             var xw = XmlWriter.Create(sw, new XmlWriterSettings
             {
@@ -221,7 +221,7 @@ namespace DesktopNotifications.Windows
 #endif
         }
 
-#if !NETSTANDARD
+#if NETSTANDARD
         private void OnAppActivated(ToastNotificationActivatedEventArgsCompat e)
         {
             Debug.Assert(_launchActionPromise != null);

@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform;
 using DesktopNotifications.FreeDesktop;
-using DesktopNotifications.Windows;
+//using DesktopNotifications.Windows;
 using System;
 
 namespace DesktopNotifications.Avalonia
@@ -23,8 +23,10 @@ namespace DesktopNotifications.Avalonia
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
-                var context = WindowsApplicationContext.FromCurrentProcess();
-                manager = new WindowsNotificationManager(context);
+                //var context = WindowsApplicationContext.FromCurrentProcess();
+                //manager = new WindowsNotificationManager(context);
+                var context = FreeDesktopApplicationContext.FromCurrentProcess();
+                manager = new FreeDesktopNotificationManager(context);
             }
             else if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
